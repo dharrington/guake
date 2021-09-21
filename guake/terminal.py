@@ -50,6 +50,7 @@ from guake.common import clamp
 from guake.globals import QUICK_OPEN_MATCHERS
 from guake.globals import TERMINAL_MATCH_EXPRS
 from guake.globals import TERMINAL_MATCH_TAGS
+from guake import myextensions
 
 log = logging.getLogger(__name__)
 
@@ -332,6 +333,7 @@ class GuakeTerminal(Vte.Terminal):
         any match string is caught, another application is open to
         handle the matched resource uri.
         """
+        myextensions.my_button_press_handler(self, terminal, event)
         self.matched_value = ""
         if (Vte.MAJOR_VERSION, Vte.MINOR_VERSION) >= (0, 46):
             matched_string = self.match_check_event(event)

@@ -74,6 +74,7 @@ from guake.utils import RectCalculator
 from guake.utils import TabNameUtils
 from guake.utils import get_server_time
 from guake.utils import save_tabs_when_changed
+from guake.showhidecontext import ShowHideContext
 
 log = logging.getLogger(__name__)
 
@@ -177,6 +178,8 @@ class Guake(SimpleGladeApp):
         self.window.set_keep_above(True)
         self.mainframe = self.get_widget("mainframe")
         self.mainframe.remove(self.get_widget("notebook-teminals"))
+
+        self.show_hide_context = ShowHideContext(self)
 
         # Pending restore for terminal split after show-up
         #     [(RootTerminalBox, TerminaBox, panes), ...]
@@ -638,6 +641,7 @@ class Guake(SimpleGladeApp):
 
     def show(self):
         """Shows the main window and grabs the focus on it."""
+        self.show_hide_context.before_show()
         self.hidden = False
 
         # setting window in all desktops
@@ -734,6 +738,7 @@ class Guake(SimpleGladeApp):
         """
         if not HidePrevention(self.window).may_hide():
             return
+        self.show_hide_context.before_hide()
         self.hidden = True
         self.get_widget("window-root").unstick()
         self.window.hide()  # Don't use hide_all here!
